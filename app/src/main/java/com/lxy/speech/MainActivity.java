@@ -21,7 +21,7 @@ import java.io.InputStream;
 public class MainActivity extends AppCompatActivity implements SpeechSynthesizerListener {
 
     SpeechSynthesizer mSpeechSynthesizer;
-    private String mSampleDirPath;
+    private String mSampleDirPath = null;
     private static final String SAMPLE_DIR_NAME = "baiduTTS";
     private static final String SPEECH_FEMALE_MODEL_NAME = "bd_etts_speech_female.dat";
     private static final String SPEECH_MALE_MODEL_NAME = "bd_etts_speech_male.dat";
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements SpeechSynthesizer
         if (mSampleDirPath == null) {
             String sdcardPath = Environment.getExternalStorageDirectory().toString();
             mSampleDirPath = sdcardPath + "/" + SAMPLE_DIR_NAME;
+            System.out.println("88888888======path===="+mSampleDirPath);
         }
         makeDir(mSampleDirPath);
         copyFromAssetsToSdcard(false, SPEECH_FEMALE_MODEL_NAME, mSampleDirPath + "/" + SPEECH_FEMALE_MODEL_NAME);
@@ -72,11 +73,11 @@ public class MainActivity extends AppCompatActivity implements SpeechSynthesizer
         this.mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_SPEECH_MODEL_FILE, mSampleDirPath + "/"
                 + SPEECH_FEMALE_MODEL_NAME);
         // 本地授权文件路径,如未设置将使用默认路径.设置临时授权文件路径，LICENCE_FILE_NAME请替换成临时授权文件的实际路径，仅在使用临时license文件时需要进行设置，如果在[应用管理]中开通了离线授权，不需要设置该参数，建议将该行代码删除（离线引擎）
-        this.mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_LICENCE_FILE, mSampleDirPath + "/"
-                + LICENSE_FILE_NAME);
+//        int i1 = mSpeechSynthesizer.setParam(SpeechSynthesizer.PARAM_TTS_LICENCE_FILE, mSampleDirPath + "/"
+//                + LICENSE_FILE_NAME);
+//        System.out.println("888888888888888=====auto====="+i1);
         // 请替换为语音开发者平台上注册应用得到的App ID (离线授权)
-        int setAppId = this.mSpeechSynthesizer.setAppId("8407242");
-        System.out.println("88888888====setAppId==" + setAppId);
+        this.mSpeechSynthesizer.setAppId("8407242");
         // 请替换为语音开发者平台注册应用得到的apikey和secretkey (在线授权)
         this.mSpeechSynthesizer.setApiKey("DYzsVdnFtSvmFSYxbvGMmUIr", "089f5b649469348adb5b374288cea381");
         // 发音人（在线引擎），可用参数为0,1,2,3。。。（服务器端会动态增加，各值含义参考文档，以文档说明为准。0--普通女声，1--普通男声，2--特别男声，3--情感男声。。。）
@@ -86,14 +87,14 @@ public class MainActivity extends AppCompatActivity implements SpeechSynthesizer
         // 授权检测接口(可以不使用，只是验证授权是否成功)
         AuthInfo authInfo = this.mSpeechSynthesizer.auth(TtsMode.MIX);
         if (authInfo.isSuccess()) {
-            //toPrint("auth success");
+
         } else {
             String errorMsg = authInfo.getTtsError().getDetailMessage();
-            //toPrint("auth failed errorMsg=" + errorMsg);
+
         }
         // 初始化tts
-        int s = mSpeechSynthesizer.initTts(TtsMode.MIX);
-        System.out.println("88888888====tts==" + s);
+        int i = mSpeechSynthesizer.initTts(TtsMode.MIX);
+        System.out.println("888888888888=======tts===="+i);
         // 加载离线英文资源（提供离线英文合成功能）
 //        int result =
 //                mSpeechSynthesizer.loadEnglishModel(mSampleDirPath + "/" + ENGLISH_TEXT_MODEL_NAME, mSampleDirPath
@@ -156,8 +157,13 @@ public class MainActivity extends AppCompatActivity implements SpeechSynthesizer
 
     public void speech(View view) {
         Toast.makeText(this, "speech", Toast.LENGTH_SHORT).show();
-        int speak = mSpeechSynthesizer.speak("哈哈哈");
-        System.out.println("88888888=====speak=" + speak);
+        speak();
+    }
+
+    private void speak() {
+
+        int speak = mSpeechSynthesizer.speak("hello,你好，hhh");
+        System.out.println("888888888=====result==="+speak);
     }
 
     @Override
